@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(
 		// securedEnabled = true,
 		// jsr250Enabled = true,
-		prePostEnabled = true)
+		prePostEnabled = true)		// allows the use of @PreAuthorize annotation
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
@@ -53,20 +53,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors()
+		http
+				.cors()
 				.and()
-				.csrf()
+				.csrf()	// remember to implement it
 				.disable()
 				.exceptionHandling()
 				.authenticationEntryPoint(unauthorizedHandler)
 				.and()
 				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)		// session won't be stored in a database
 				.and()
 				.authorizeRequests()
 				.antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/api/test/**").permitAll()
-				.anyRequest().authenticated();
+//				.antMatchers("/api/test/**").permitAll()
+				.anyRequest()
+				.authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
