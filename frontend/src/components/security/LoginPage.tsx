@@ -67,7 +67,7 @@ export default function LoginPage() {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <CloudRoundedIcon/>
+            <CloudRoundedIcon fontSize='medium' />
           </Avatar>
           <Typography component="h1" variant="h5">
             Hello there!
