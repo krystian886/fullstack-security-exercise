@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import LoginPage from './security/components/LoginPage'
 import Confirmation from './components/Confirmation';
+import { SnackbarProvider } from "notistack";
+import authService from './security/services/auth.service';
 
 
 const App : React.FC = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
   const [userIsAdmin, setUserIsAdmin] = useState(false);
 
-  //useEffect(() => {
-    //const user = AuthService.getCurrentUser();
+  useEffect(() => {
+    const user = authService.getCurrentUser();
 
-    // if (user) {
-    //   setCurrentUser(user);
-    //   setUserIsAdmin(user.roles.includes("ROLE_ADMIN"));
-    // }
+    if (user) {
+      setCurrentUser(user);
+      setUserIsAdmin(user.roles.includes("ROLE_ADMIN"));
+    }
 
     // EventBus.on("logout", () => {
     //   logOut();
@@ -22,7 +24,7 @@ const App : React.FC = () => {
     // return () => {
     //   EventBus.remove("logout");
     // };
-  //}, []);
+  }, []);
 
   // const logOut = () => {
   //   AuthService.logout();
@@ -32,12 +34,14 @@ const App : React.FC = () => {
 
   return (
     <>
-      {!currentUser && (
-        <LoginPage/>
-      )}
-      {currentUser && (
-        <Confirmation/>
-      )}
+      <SnackbarProvider maxSnack={2}>
+        {!currentUser && (
+          <LoginPage/>
+        )}
+        {currentUser && (
+          <Confirmation/>
+        )}
+      </SnackbarProvider>
     </>
   );
 }

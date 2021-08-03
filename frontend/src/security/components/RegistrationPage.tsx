@@ -10,6 +10,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Dialog } from '@material-ui/core';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import defs from '../services/defs';
+import { useSnackbar } from "notistack";
+import authService from '../services/auth.service';
 
 function Copyright() {
   return (
@@ -47,9 +52,45 @@ const useStyles = makeStyles((theme) => ({
 const RegistrationPage: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   const trigger = () => {
     setOpen(!open);
+  };
+
+  const formik = useFormik({
+      initialValues: {
+          username: "",
+          email: "",
+          password: "",
+      },
+      validationSchema: Yup.object({
+          username: Yup.string()
+              .min(defs.MIN_USERNAME_CHARS)
+              .max(defs.MAX_USERNAME_CHARS)
+              .required(),
+          email: Yup.string()
+              .min(defs.MIN_EMAIL_CHARS)
+              .max(defs.MAX_EMAIL_CHARS)
+              .required()
+              .email(),
+          password: Yup.string()
+              .min(defs.MIN_PASSWORD_CHARS)
+              .max(defs.MAX_PASSWORD_CHARS)
+              .required(),
+      }),
+      onSubmit: async (values) => {
+          const status = await authService.register(values);
+          //handleClick(status);
+      }
+  });
+
+  const handleClick = (status: number | undefined) => {
+      if(status==200){
+          // TODO
+      }else{
+          // TODO
+      }
   };
 
   return (
@@ -70,7 +111,7 @@ const RegistrationPage: React.FC = () => {
           <Typography component="h1" variant="h5">
             New Account
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={formik.handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -81,6 +122,9 @@ const RegistrationPage: React.FC = () => {
                   label="Username"
                   name="username"
                   autoFocus
+                  onChange={formik.handleChange}
+                  error={formik.touched.username && formik.errors.username ? true : false}
+                  helperText={(formik.touched.username && formik.errors.username) ?? false}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -92,6 +136,9 @@ const RegistrationPage: React.FC = () => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={formik.handleChange} 
+                  error={formik.touched.email && formik.errors.email ? true : false}
+                  helperText={(formik.touched.email && formik.errors.email) ?? false}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -104,6 +151,9 @@ const RegistrationPage: React.FC = () => {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  onChange={formik.handleChange} 
+                  error={formik.touched.password && formik.errors.password ? true : false}
+                  helperText={(formik.touched.password && formik.errors.password) ?? false}
                 />
               </Grid>
             </Grid>

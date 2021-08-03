@@ -14,6 +14,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import RegistrationPage from './RegistrationPage';
 import ForgottenPassword from './ForgottenPassword';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import defs from '../services/defs';
+import authService from '../services/auth.service';
+import { useSnackbar } from "notistack";
 
 function Copyright() {
   return (
@@ -59,8 +64,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 const LoginPage: React.FC = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+
+
+  const formik = useFormik({
+    initialValues: {
+        email: "",
+        password: "",
+    },
+    validationSchema: Yup.object({
+        email: Yup.string()
+            .min(defs.MIN_EMAIL_CHARS)
+            .max(defs.MAX_EMAIL_CHARS)
+            .required()
+            .email(),
+        password: Yup.string()
+            .min(defs.MIN_PASSWORD_CHARS)
+            .max(defs.MAX_PASSWORD_CHARS)
+            .required()
+    }),
+    onSubmit: async (values) => {
+        const status = await authService.login(values);
+        //handleClick(status);
+    }
+  });
+  
+  const handleClick = (status: number | undefined) => {
+    if(status==200){
+        // TODO
+    } else{
+       // TODO
+    }
+  };
+
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -74,7 +114,7 @@ const LoginPage: React.FC = () => {
           <Typography component="h1" variant="h5">
             Hello there!
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={formik.handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -85,6 +125,9 @@ const LoginPage: React.FC = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={formik.handleChange}
+              error={formik.touched.email && formik.errors.email ? true : false}
+              helperText={(formik.touched.email && formik.errors.email) ?? false}
             />
             <TextField
               variant="outlined"
@@ -96,11 +139,14 @@ const LoginPage: React.FC = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={formik.handleChange} 
+              error={formik.touched.password && formik.errors.password ? true : false}
+              helperText={(formik.touched.password && formik.errors.password) ?? false}
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth
