@@ -12,6 +12,8 @@ import Grid from '@material-ui/core/Grid';
 import CloudRoundedIcon from '@material-ui/icons/CloudRounded';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import RegistrationPage from './RegistrationPage';
+import ForgottenPassword from './ForgottenPassword';
 
 function Copyright() {
   return (
@@ -53,11 +55,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(1, 0, 2),
   },
 }));
 
-export default function LoginPage() {
+const LoginPage: React.FC = () => {
   const classes = useStyles();
 
   return (
@@ -110,14 +112,10 @@ export default function LoginPage() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <ForgottenPassword/>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Create an account."}
-                </Link>
+                <RegistrationPage/>
               </Grid>
             </Grid>
             <Box mt={5}>
@@ -129,3 +127,5 @@ export default function LoginPage() {
     </Grid>
   );
 }
+
+export default LoginPage;

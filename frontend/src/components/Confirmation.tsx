@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function Confirmation() {
+const Confirmation: React.FC = () => {
   const [spacing, setSpacing] = React.useState<GridSpacing>(2);
   const classes = useStyles();
 
@@ -78,3 +78,5 @@ export default function Confirmation() {
     </Grid>
   );
 }
+
+export default Confirmation;
