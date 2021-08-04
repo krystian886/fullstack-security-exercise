@@ -86,7 +86,7 @@ const RegistrationPage: React.FC = () => {
   });
 
   const handleClick = (status: number | undefined) => {
-      if(status==200){
+      if(status===200){
         const message = "Registered Successfully!";
         enqueueSnackbar(message, {
             variant: "success",

@@ -15,42 +15,30 @@ const App : React.FC = () => {
       AuthService.logout();
       setUserIsAdmin(false);
       setCurrentUser(undefined);
-    }
+    } else loginHelper();
     setshowLoginComponent(!showLoginComponent);
   };
 
-  // useEffect(() => {
-  //   const user = AuthService.getCurrentUser();
+  const loginHelper = () => {
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      setCurrentUser(user);
+      setUserIsAdmin(user.roles.includes("ROLE_ADMIN"));
+    }
+  }
 
-  //   if (user) {
-  //     setCurrentUser(user);
-  //     setUserIsAdmin(user.roles.includes("ROLE_ADMIN"));
-  //     //console.log(user);
-  //   }
-
-  //   // EventBus.on("logout", () => {
-  //   //   logOut();
-  //   // });
-
-  //   // return () => {
-  //   //   EventBus.remove("logout");
-  //   // };
-  // }, []);
-
-  // const logOut = () => {
-  //   AuthService.logout();
-  //   setUserIsAdmin(false);
-  //   setCurrentUser(undefined);
-  // };
+  useEffect(() => {
+    loginHelper();
+  }, []);
 
   return (
     <>
       <SnackbarProvider maxSnack={2}>
-        {showLoginComponent && (
+        {!currentUser && (
           <LoginPage loginTrigger={loginTrigger}/>
         )}
-        {!showLoginComponent && (
-          <Confirmation loginTrigger={loginTrigger}/>
+        {currentUser && (
+          <Confirmation loginTrigger={loginTrigger} />
         )}
       </SnackbarProvider>
     </>
