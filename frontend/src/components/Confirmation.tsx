@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     info: {
       padding: "10px",
+      textAlign: "center",
     }
   }),
 );
@@ -17,26 +18,20 @@ type ConfirmationProps = {
 };
 
 const Confirmation: React.FC<ConfirmationProps> = ({loginTrigger}) => {
-  const [currentUser, setCurrentUser] = useState(undefined);
   const classes = useStyles();
-
-  // const printUserData = () => {
-  //   const user:string[] = AuthService.getCurrentUser();
-    
-  //   return(
-  //     <ul>
-  //       {user.map(item => {
-  //         return <li>{item}</li>;
-  //       })}
-  //     </ul>
-  //   )
-  // }
+  const user = AuthService.getCurrentUser();
 
   return (
     <Container component="main" maxWidth="xs">
       <h2 className={classes.info}>
-        Congrats! You have reached sensitive content.
+        Congrats! You are logged in.
       </h2>
+      <ul>
+        <li>user id: {user.id}</li>
+        <li>username: {user.username}</li>
+        <li>email: {user.email}</li>
+        <li>roles: {user.roles}</li>
+      </ul>
       <Button
         fullWidth
         variant="contained"

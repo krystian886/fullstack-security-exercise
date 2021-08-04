@@ -8,12 +8,12 @@ import AuthService from './security/services/auth.service';
 const App : React.FC = () => {
   const [showLoginComponent, setshowLoginComponent] = useState(true);
   const [currentUser, setCurrentUser] = useState(undefined);
-  const [userIsAdmin, setUserIsAdmin] = useState(false);
+  //const [userIsAdmin, setUserIsAdmin] = useState(false);
 
   const loginTrigger = () => {
     if (!showLoginComponent) {
       AuthService.logout();
-      setUserIsAdmin(false);
+      //setUserIsAdmin(false);
       setCurrentUser(undefined);
     } else loginHelper();
     setshowLoginComponent(!showLoginComponent);
@@ -23,7 +23,7 @@ const App : React.FC = () => {
     const user = AuthService.getCurrentUser();
     if (user) {
       setCurrentUser(user);
-      setUserIsAdmin(user.roles.includes("ROLE_ADMIN"));
+      //setUserIsAdmin(user.roles.includes("ROLE_ADMIN"));
     }
   }
 
@@ -38,7 +38,7 @@ const App : React.FC = () => {
           <LoginPage loginTrigger={loginTrigger}/>
         )}
         {currentUser && (
-          <Confirmation loginTrigger={loginTrigger} />
+          <Confirmation loginTrigger={loginTrigger}/>
         )}
       </SnackbarProvider>
     </>
