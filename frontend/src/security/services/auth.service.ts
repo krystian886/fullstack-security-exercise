@@ -1,33 +1,36 @@
 import axios from "axios";
 import defs from "./defs"
 
-const register = (data: { username: string; email:string, password: string }) => {
-  return axios.post(defs.API_URL + "register", {data});
-};
-
-const login = (data: { email: string; password: string }) => {
-  return axios
-    .post(defs.API_URL + "login", {data})
-    .then((response) => {
-      if (response.data.accessToken) {
+class AuthService {
+  async login(data: { username: string; password: string }) {
+    try {
+      const response = await axios.post(defs.API_URL + "login", data);
+      if (response.data.token) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
+      return response.status; 
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      return response.status;
-    });
-};
+  logout() {
+    localStorage.removeItem("user");
+  }
 
-const logout = () => {
-  localStorage.removeItem("user");
-};
+  async register(data: {username: string; email: string; password: string;}) {
+    try {
+      const response = await axios.post(defs.API_URL + "register", data);
+      return response.status; 
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("user")!);   // NOT SURE
-};
+  getCurrentUser() {
+    return JSON.parse(localStorage.getItem("user")!);   // NOT SURE
+  };
 
-export default {
-  register,
-  login,
-  logout,
-  getCurrentUser,
-};
+}
+
+export default new AuthService();

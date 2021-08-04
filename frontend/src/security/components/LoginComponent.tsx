@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,12 +12,12 @@ import Grid from '@material-ui/core/Grid';
 import CloudRoundedIcon from '@material-ui/icons/CloudRounded';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import RegistrationPage from './RegistrationPage';
+import RegistrationPage from './RegistrationComponent';
 import ForgottenPassword from './ForgottenPassword';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import defs from '../services/defs';
-import authService from '../services/auth.service';
+import AuthService from '../services/auth.service';
 import { useSnackbar } from "notistack";
 
 function Copyright() {
@@ -64,43 +64,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+type LoginProps = {
+  loginTrigger: () => void,
+};
 
-
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC<LoginProps> = ({loginTrigger}) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
-
   const formik = useFormik({
     initialValues: {
-        email: "",
+        username: "",
         password: "",
     },
     validationSchema: Yup.object({
-        email: Yup.string()
-            .min(defs.MIN_EMAIL_CHARS)
-            .max(defs.MAX_EMAIL_CHARS)
-            .required()
-            .email(),
+        username: Yup.string()
+            .min(defs.MIN_USERNAME_CHARS)
+            .max(defs.MAX_USERNAME_CHARS)
+           .required(),
         password: Yup.string()
             .min(defs.MIN_PASSWORD_CHARS)
             .max(defs.MAX_PASSWORD_CHARS)
             .required()
     }),
     onSubmit: async (values) => {
-        const status = await authService.login(values);
-        //handleClick(status);
+        const status = await AuthService.login(values);
+        handleClick(status);
     }
   });
   
   const handleClick = (status: number | undefined) => {
     if(status==200){
-        // TODO
+      loginTrigger();
     } else{
-       // TODO
+      const message = "Error: Bad Credentials";
+      enqueueSnackbar(message, {
+          variant: "error",
+          anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "center",
+          },
+      });
     }
   };
-
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -117,17 +123,15 @@ const LoginPage: React.FC = () => {
           <form className={classes.form} onSubmit={formik.handleSubmit}>
             <TextField
               variant="outlined"
-              margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
               autoFocus
               onChange={formik.handleChange}
-              error={formik.touched.email && formik.errors.email ? true : false}
-              helperText={(formik.touched.email && formik.errors.email) ?? false}
+              error={formik.touched.username && formik.errors.username ? true : false}
+              helperText={(formik.touched.username && formik.errors.username) ?? false}
             />
             <TextField
               variant="outlined"

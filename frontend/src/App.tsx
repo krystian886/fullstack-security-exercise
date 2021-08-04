@@ -1,30 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import LoginPage from './security/components/LoginPage'
+import LoginPage from './security/components/LoginComponent'
 import Confirmation from './components/Confirmation';
 import { SnackbarProvider } from "notistack";
-import authService from './security/services/auth.service';
+import AuthService from './security/services/auth.service';
 
 
 const App : React.FC = () => {
+  const [showLoginComponent, setshowLoginComponent] = useState(true);
   const [currentUser, setCurrentUser] = useState(undefined);
   const [userIsAdmin, setUserIsAdmin] = useState(false);
 
-  useEffect(() => {
-    const user = authService.getCurrentUser();
-
-    if (user) {
-      setCurrentUser(user);
-      setUserIsAdmin(user.roles.includes("ROLE_ADMIN"));
+  const loginTrigger = () => {
+    if (!showLoginComponent) {
+      AuthService.logout();
+      setUserIsAdmin(false);
+      setCurrentUser(undefined);
     }
+    setshowLoginComponent(!showLoginComponent);
+  };
 
-    // EventBus.on("logout", () => {
-    //   logOut();
-    // });
+  // useEffect(() => {
+  //   const user = AuthService.getCurrentUser();
 
-    // return () => {
-    //   EventBus.remove("logout");
-    // };
-  }, []);
+  //   if (user) {
+  //     setCurrentUser(user);
+  //     setUserIsAdmin(user.roles.includes("ROLE_ADMIN"));
+  //     //console.log(user);
+  //   }
+
+  //   // EventBus.on("logout", () => {
+  //   //   logOut();
+  //   // });
+
+  //   // return () => {
+  //   //   EventBus.remove("logout");
+  //   // };
+  // }, []);
 
   // const logOut = () => {
   //   AuthService.logout();
@@ -35,11 +46,11 @@ const App : React.FC = () => {
   return (
     <>
       <SnackbarProvider maxSnack={2}>
-        {!currentUser && (
-          <LoginPage/>
+        {showLoginComponent && (
+          <LoginPage loginTrigger={loginTrigger}/>
         )}
-        {currentUser && (
-          <Confirmation/>
+        {!showLoginComponent && (
+          <Confirmation loginTrigger={loginTrigger}/>
         )}
       </SnackbarProvider>
     </>

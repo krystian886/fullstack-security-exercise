@@ -14,7 +14,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import defs from '../services/defs';
 import { useSnackbar } from "notistack";
-import authService from '../services/auth.service';
+import AuthService from '../services/auth.service';
 
 function Copyright() {
   return (
@@ -80,16 +80,31 @@ const RegistrationPage: React.FC = () => {
               .required(),
       }),
       onSubmit: async (values) => {
-          const status = await authService.register(values);
-          //handleClick(status);
+          const status = await AuthService.register(values);
+          handleClick(status);
       }
   });
 
   const handleClick = (status: number | undefined) => {
       if(status==200){
-          // TODO
+        const message = "Registered Successfully!";
+        enqueueSnackbar(message, {
+            variant: "success",
+            anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "center",
+            },
+        });
+        trigger();
       }else{
-          // TODO
+        const message = "Error! Username or Email already taken.";
+        enqueueSnackbar(message, {
+            variant: "error",
+            anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "center",
+            },
+        });
       }
   };
 
