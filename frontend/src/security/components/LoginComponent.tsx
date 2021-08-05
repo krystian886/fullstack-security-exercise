@@ -92,10 +92,10 @@ const LoginPage: React.FC<LoginProps> = ({loginTrigger}) => {
   });
   
   const handleClick = (status: number | undefined) => {
-    if(status===200){
+    if(status===200) {
       loginTrigger();
-    } else{
-      const message = "Error: Bad Credentials";
+    } else {
+      const message = "Bad Credentials or Email Not Verified.";
       enqueueSnackbar(message, {
           variant: "error",
           anchorOrigin: {

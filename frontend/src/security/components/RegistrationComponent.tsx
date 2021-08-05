@@ -87,7 +87,7 @@ const RegistrationPage: React.FC = () => {
 
   const handleClick = (status: number | undefined) => {
       if(status===200){
-        const message = "Registered Successfully!";
+        var message = "Registered Successfully!";
         enqueueSnackbar(message, {
             variant: "success",
             anchorOrigin: {
@@ -95,9 +95,17 @@ const RegistrationPage: React.FC = () => {
                 horizontal: "center",
             },
         });
+        message = "Check your email for verification message!";
+        enqueueSnackbar(message, {
+          variant: "success",
+          anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "center",
+          },
+      });
         trigger();
       }else{
-        const message = "Error! Username or Email already taken.";
+        const message = "Username or Email already taken.";
         enqueueSnackbar(message, {
             variant: "error",
             anchorOrigin: {

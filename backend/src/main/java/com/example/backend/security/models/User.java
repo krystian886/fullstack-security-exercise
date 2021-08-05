@@ -37,6 +37,12 @@ public class User {
 	@Size(max = 120)
 	private String password;
 
+	@NotBlank
+	private boolean accountVerified;
+
+	@OneToMany(mappedBy = "user")
+	private Set<EmailToken> tokens;
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_roles", 
 				joinColumns = @JoinColumn(name = "user_id"), 
@@ -47,5 +53,6 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.accountVerified=false;
 	}
 }
