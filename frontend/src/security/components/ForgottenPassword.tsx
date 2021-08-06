@@ -10,6 +10,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Dialog } from '@material-ui/core';
+import { useFormik } from "formik";
+import { useSnackbar } from "notistack";
+import * as Yup from "yup";
+import defs from '../services/defs';
+import AuthService from '../services/auth.service';
 
 function Copyright() {
   return (
@@ -48,9 +53,50 @@ const useStyles = makeStyles((theme) => ({
 const ForgottenPassword: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   const trigger = () => {
     setOpen(!open);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+        email: "",
+    },
+    validationSchema: Yup.object({
+        email: Yup.string()
+        .min(defs.MIN_EMAIL_CHARS)
+        .max(defs.MAX_EMAIL_CHARS)
+        .required()
+        .email(),
+    }),
+    onSubmit: async (value) => {
+      const status = await AuthService.resetPassword(value);
+      handleClick(status);
+    }
+  });
+  
+  const handleClick = (status: number | undefined) => {
+    if(status===200) {
+      var message = "To Finish: Check Your Email.";
+      enqueueSnackbar(message, {
+          variant: "success",
+          anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "center",
+          },
+      });
+      trigger();
+    } else {
+      const message = "Email Wrong or Not Verified.";
+      enqueueSnackbar(message, {
+          variant: "error",
+          anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "center",
+          },
+      });
+    }
   };
 
   return (
@@ -72,18 +118,21 @@ const ForgottenPassword: React.FC = () => {
           <Typography component="h1" variant="h5">
             New Password
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={formik.handleSubmit}>
             <Grid item xs={12}>
-                <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                />
+              <TextField
+              variant="outlined"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              onChange={formik.handleChange} 
+              error={formik.touched.email && formik.errors.email ? true : false}
+              helperText={(formik.touched.email && formik.errors.email) ?? false}
+              />
             </Grid>
             <Button
               type="submit"
@@ -92,7 +141,7 @@ const ForgottenPassword: React.FC = () => {
               color="primary"
               className={classes.submit}
             >
-              Confirm
+              Reset
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

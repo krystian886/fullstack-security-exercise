@@ -65,19 +65,19 @@ const RegistrationPage: React.FC = () => {
           password: "",
       },
       validationSchema: Yup.object({
-          username: Yup.string()
-              .min(defs.MIN_USERNAME_CHARS)
-              .max(defs.MAX_USERNAME_CHARS)
-              .required(),
-          email: Yup.string()
-              .min(defs.MIN_EMAIL_CHARS)
-              .max(defs.MAX_EMAIL_CHARS)
-              .required()
-              .email(),
-          password: Yup.string()
-              .min(defs.MIN_PASSWORD_CHARS)
-              .max(defs.MAX_PASSWORD_CHARS)
-              .required(),
+        username: Yup.string()
+            .min(defs.MIN_USERNAME_CHARS)
+            .max(defs.MAX_USERNAME_CHARS)
+            .required(),
+        email: Yup.string()
+            .min(defs.MIN_EMAIL_CHARS)
+            .max(defs.MAX_EMAIL_CHARS)
+            .required()
+            .email(),
+        password: Yup.string()
+            .min(defs.MIN_PASSWORD_CHARS)
+            .max(defs.MAX_PASSWORD_CHARS)
+            .required(),
       }),
       onSubmit: async (values) => {
           const status = await AuthService.register(values);

@@ -56,17 +56,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				.cors()
 				.and()
-				.csrf()	// remember to implement it
+				.csrf()	// JWT does not need csrf protection
 				.disable()
 				.exceptionHandling()
 				.authenticationEntryPoint(unauthorizedHandler)
 				.and()
 				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)		// session won't be stored in a database
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)		// sessions won't be stored in a database
 				.and()
 				.authorizeRequests()
 				.antMatchers("/api/auth/**").permitAll()
-//				.antMatchers("/api/test/**").permitAll()
 				.anyRequest()
 				.authenticated();
 

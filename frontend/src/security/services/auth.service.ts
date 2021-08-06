@@ -27,8 +27,17 @@ class AuthService {
     }
   }
 
+  async resetPassword(data: {email: string;}) {
+    try {
+      const response = await axios.post(defs.API_URL + "reset", data);
+      return response.status; 
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem("user")!);   // NOT SURE
+    return JSON.parse(localStorage.getItem("user")!);
   };
 
 }
