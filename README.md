@@ -1,4 +1,4 @@
-# fullstack-login-exercise
+# fullstack-security-exercise
 
 List of content
 
@@ -47,9 +47,9 @@ Forgot password component:<br>
 
 The application takes advantage of a Notistack package:<br>
 
-![sceenshot_4](/img/4.png) <br>
-![sceenshot_5](/img/5.png) <br>
-![sceenshot_10](/img/10.png) <br>
+![sceenshot_4](/img/4.png) <br><br>
+![sceenshot_5](/img/5.png) <br><br>
+![sceenshot_10](/img/10.png) <br><br>
 
 Front page for logged-in users:<br>
 ![sceenshot_12](/img/12.png) <br>
@@ -62,8 +62,8 @@ To be able to successfully login, email confirmation is required. Java for that 
 For test purposes I was using my gmail account, but that is not a preferable solution, because there are some security settings on google account which must be changed before. So I highly suggest tools like <b>https://hub.docker.com/r/maildev/maildev</b>.
 
 Here are some examples:<br>
-![sceenshot_6](/img/6.png) <br>
-![sceenshot_7](/img/7.png) <br>
+![sceenshot_6](/img/6-min.png) <br>
+![sceenshot_7](/img/7-min.png) <br>
 ![sceenshot_8](/img/8.png) <br>
 ![sceenshot_9](/img/9.png) <br>
 ![sceenshot_11](/img/11.png) <br>
